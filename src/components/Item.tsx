@@ -1,12 +1,21 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import cn from 'classnames';
+import { GlobalStateContext } from '../App';
+import { TodoDto } from '../models';
 
-interface Props {
-  value: string;
-  isActive: boolean;
-}
+const Item: FC<TodoDto> = ({ id, value, isActive }) => {
+  const {
+    todosService: { send },
+  } = useContext(GlobalStateContext);
 
-const Item: FC<Props> = ({ value, isActive }) => {
+  const handleRemoveClick = () => {
+    send({ type: 'removeItem', id });
+  };
+
+  const handleStatusClick = () => {
+    send({ type: 'changeItem', id, isActive: !isActive });
+  };
+
   return (
     <div className="flex items-center mb-4">
       <p
@@ -17,6 +26,7 @@ const Item: FC<Props> = ({ value, isActive }) => {
         {value}
       </p>
       <button
+        onClick={handleStatusClick}
         className={cn(
           'p-2 ml-3 mr-2 border-2 min-w-[90px] rounded shrink-0 hover:text-white',
           {
@@ -29,7 +39,10 @@ const Item: FC<Props> = ({ value, isActive }) => {
       >
         {isActive ? 'Done' : 'Not Done'}
       </button>
-      <button className="min-w-[80px] p-2 ml-1 text-red-500 border-2 border-red-500 rounded shrink-0 hover:text-white hover:bg-red-500 active:border-red-600 active:bg-red-600">
+      <button
+        onClick={handleRemoveClick}
+        className="min-w-[80px] p-2 ml-1 text-red-500 border-2 border-red-500 rounded shrink-0 hover:text-white hover:bg-red-500 active:border-red-600 active:bg-red-600"
+      >
         Remove
       </button>
     </div>

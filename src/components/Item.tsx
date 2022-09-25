@@ -13,7 +13,7 @@ const Item: FC<TodoDto> = ({ id, value, isActive }) => {
   };
 
   const handleStatusClick = () => {
-    send({ type: 'changeItem', id, isActive: !isActive });
+    send({ type: 'changeItem', id, value: !isActive });
   };
 
   return (
